@@ -1,26 +1,35 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { UserContext } from "../components/UserContext";
+import useUser from "../components/useUser.js";
+
+type LoginForm = {
+    username : string ,
+    password : string
+  }
+  type LoginResponse = {
+  accessToken: string
+};
 
 function Login() {
-  const [user, setuser] = useState({
+
+  const [user, setuser] = useState<LoginForm>({
     username: "",
     password: "",
   });
-  const { setToken } = useContext(UserContext);
+  const { setToken } = useUser()
   const navigate = useNavigate();
   
-  const handlchange = (e) => {
+  const handlchange = (e : React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setuser({ ...user, [name]: value });
   };
   const { username, password } = user;
 
-  const submitting = async (e) => {
+  const submitting = async (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("https://dummyjson.com/user/login", {
+      const { data } = await axios.post<LoginResponse>("https://dummyjson.com/user/login", {
         username,
         password,
       });

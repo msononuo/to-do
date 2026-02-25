@@ -1,25 +1,31 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+type Task = {
+  id : string ,
+  title : string
+}
+type FormValues = {
+  title : string
+}
+
 function Dashboard() {
-  const [tasks, setTasks] = useState([]);
-  const [editingID, setEditingID] = useState(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [editingID, setEditingID] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
-    defaultValues: { title: "" },
-  });
+  } = useForm<FormValues>()
 
-  const onSubmit = (data) => {
+  const onSubmit = (data : FormValues) => {
     const title = data.title.trim();
     if (!title) return;
 
     if (editingID === null) {
-      const newTask = { id: crypto.randomUUID(), title };
+      const newTask : Task = { id: crypto.randomUUID(), title };
       setTasks( [...tasks, newTask]);
     } else {
       setTasks((tasks) =>
@@ -31,7 +37,7 @@ function Dashboard() {
     reset({ title: "" });
   };
 
-  const handlDelete = (id) => {
+  const handlDelete = (id : string) => {
     setTasks((prev) => prev.filter((t) => t.id !== id));
     if (editingID === id) {
       setEditingID(null);
@@ -39,7 +45,7 @@ function Dashboard() {
     }
   };
 
-  const handlEdit = (t) => {
+  const handlEdit = (t : Task) => {
     setEditingID(t.id);
     reset({ title: t.title });
   };

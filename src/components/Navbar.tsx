@@ -1,10 +1,10 @@
-import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { UserContext } from "./UserContext";
+import useUser from "./useUser.js";
 
 function Navbar() {
+  
   const navigate = useNavigate()
-  const { token, setToken } = useContext(UserContext);
+  const { token, setToken } = useUser()
   const logout = () => {
     setToken(null);
     navigate('/')
