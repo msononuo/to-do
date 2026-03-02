@@ -2,57 +2,74 @@ import { NavLink, useNavigate } from "react-router-dom";
 import useUser from "./useUser.js";
 
 function Navbar() {
-  
-  const navigate = useNavigate()
-  const { token, setToken } = useUser()
+  const navigate = useNavigate();
+  const { token, setToken } = useUser();
+
   const logout = () => {
     setToken(null);
-    navigate('/')
+    navigate("/");
   };
+
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
-        <NavLink className="navbar-brand" to="/">
+    <nav className="bg-slate-900 text-white shadow-md">
+      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+        <NavLink
+          to="/"
+          className="text-2xl font-bold text-blue-400 hover:text-blue-300 transition"
+        >
           TO-DO
         </NavLink>
 
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+        <ul className="flex items-center gap-6 text-lg">
+          <li>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-blue-400 font-semibold"
+                  : "hover:text-blue-300 transition"
+              }
+            >
+              Home
+            </NavLink>
+          </li>
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/">
-                Home
-              </NavLink>
-            </li>
-            {token ? (
-              <>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/dashboard">
-                    Dashboard
-                  </NavLink>
-                </li>
-                <button type="button" className="btn btn-danger" onClick={logout}>Logout</button>
-              </>
-            ) : (
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/login">
-                  Login
+          {token ? (
+            <>
+              <li>
+                <NavLink
+                  to="/dashboard"
+                  className={({ isActive }) =>
+                    isActive
+                      ? "text-blue-400 font-semibold"
+                      : "hover:text-blue-300 transition"
+                  }
+                >
+                  Dashboard
                 </NavLink>
               </li>
-            )}
-          </ul>
-        </div>
+
+              <li>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition"
+                >
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <NavLink
+                to="/login"
+                className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg transition"
+              >
+                Login
+              </NavLink>
+            </li>
+          )}
+        </ul>
       </div>
     </nav>
   );
